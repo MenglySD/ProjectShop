@@ -1,0 +1,21 @@
+.product-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Show 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.product-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pro-img{
+    height: 250px;
+    width: 100%;
+    object-fit: contain;
+    padding: 10px;
+
+}

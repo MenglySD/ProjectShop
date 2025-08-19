@@ -1,0 +1,115 @@
+<app-nav></app-nav>
+
+<div class="flex flex-col items-center mt-10 mb-10 px-4 sm:px-10">
+  <div class="bg-white shadow-xl rounded-2xl w-full max-w-6xl p-6 sm:p-10">
+
+    <!-- Shopping Cart Title -->
+    <div class="flex justify-between items-center border-b pb-4 mb-6">
+      <h2 class="text-2xl font-bold text-blue-500">Shopping Cart</h2>
+      <p class="text-gray-500">{{ cartService.getCartItem().length }} items</p>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      
+      <!-- LEFT: Cart Items -->
+      <div class="lg:col-span-2">
+
+        @if(cartService.getCartItem().length === 0) {
+          <div class="flex flex-col items-center justify-center text-center py-20 text-gray-500">
+            <p class="text-xl font-semibold">Your cart is empty</p>
+            <button routerLink="/" 
+              class="mt-6 bg-red-500 text-white px-6 py-2 rounded-xl hover:bg-red-600 transition">
+              Continue Shopping
+            </button>
+          </div>
+        }
+
+        @for(item of cartService.getCartItem(); track item.id) {
+          <div class="flex items-center justify-between border-b py-6">
+            
+            <!-- Product Info -->
+            <div class="flex items-center gap-6 flex-1">
+              <!-- Checkbox -->
+              <input type="checkbox" 
+                     [checked]="item.is_select" 
+                     (change)="cartService.selectCartItem(item)" 
+                     class="w-5 h-5 accent-red-500" />
+
+              <!-- Product Image -->
+              <img [src]="item.image" alt="Product Image" 
+                   class="w-15 h-15 object-contain rounded-lg border-none" />
+
+              <!-- Title + Size -->
+              <div>
+                <h3 class="font-semibold text-lg text-gray-800">{{ item.title }}</h3>
+                <p class="text-sm text-gray-500">Size: {{ item.size || '—' }}</p>
+              </div>
+            </div>
+
+            <!-- Quantity Controls -->
+            <div class="flex items-center gap-3">
+              <button (click)="cartService.decreaseQuantity(item)" 
+                      class="w-8 h-8 border rounded-lg flex items-center justify-center hover:bg-gray-100">-</button>
+              <span class="w-6 text-center font-medium">{{ item.quantity }}</span>
+              <button (click)="cartService.increaseQuantity(item)" 
+                      class="w-8 h-8 border rounded-lg flex items-center justify-center hover:bg-gray-100">+</button>
+            </div>
+
+            <!-- Price + Remove -->
+            <div class="text-right w-28">
+              <p class="font-semibold text-lg text-gray-800">
+                {{ item.price * item.quantity | currency }}
+              </p>
+              <button (click)="cartService.removeItem(item)" 
+                      class="text-gray-400 hover:text-red-500 text-sm mt-1">
+                ✕
+              </button>
+            </div>
+          </div>
+        }
+
+      </div> <!-- end LEFT column -->
+
+      <!-- RIGHT: Summary -->
+      @if(cartService.getCartItem().length > 0) {
+        <div class="bg-gray-50 rounded-xl p-6 flex flex-col justify-between">
+          <h3 class="text-lg font-semibold mb-4 text-blue-500">Summary</h3>
+
+          <div class="space-y-3 text-sm text-gray-600">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span>{{ cartService.getCartTotal() | currency }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Shipping</span>
+              <span>$0.00</span>
+            </div>
+          </div>
+
+          <!-- Promo Code -->
+          <div class="mt-4">
+            <label class="text-sm text-gray-500">Promo code</label>
+            <input type="text" placeholder="Enter code" 
+                   class="mt-1 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black" />
+          </div>
+
+          <!-- Total -->
+          <div class="flex justify-between items-center border-t pt-4 mt-6 text-lg font-bold ">
+            <span>Total</span>
+            <span>{{ cartService.getCartTotal() | currency }}</span>
+          </div>
+
+          <!-- Checkout -->
+          <button routerLink="/checkout" 
+                  class="mt-6 bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-700 transition">
+            Checkout
+          </button>
+        </div>
+      }
+
+    </div> <!-- end GRID -->
+  </div>
+</div>
+
+
